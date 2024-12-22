@@ -1,0 +1,29 @@
+{
+  "name": "tut24",
+  "version": "1.0.0",
+  "description": "A Node Js Tutorial 12, 2024",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alok2565/nodejs-tut2024.git"
+  },
+  "keywords": [
+    "Code",
+    "step",
+    "by",
+    "step",
+    "2024"
+  ],
+  "author": "alok singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alok2565/nodejs-tut2024/issues"
+  },
+  "homepage": "https://github.com/Alok2565/nodejs-tut2024#readme",
+  "dependencies": {
+    "colors": "^1.4.0"
+  }
+}
