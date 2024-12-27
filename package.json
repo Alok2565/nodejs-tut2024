@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/Alok2565/nodejs-tut2024#readme",
   "dependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
   }
 }

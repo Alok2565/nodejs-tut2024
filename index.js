@@ -1,14 +1,28 @@
-const fs = require('fs');
+const express = require('express');
 const path = require('path');
-const dirPath = path.join(__dirname,'files');
-//console.log(dirPath);
-// for(i=1;i<=5;i++)
-// {
-//  fs.writeFileSync(dirPath+'/hello'+i+'.txt','This is simple file');   
-// }
-fs.readdir(dirPath,(err,files) => {
-    files.forEach((item) => {
-        console.log("File name is",item);
-    })
-    //console.warn(files);
+const app = express();
+
+app.set('view engine','ejs');
+
+
+const publicPath = path.join(__dirname,'public');
+app.get('/', (_, resp)=>{
+    resp.sendFile(`${publicPath}/index.html`);
+});
+
+app.get('/profile',(_,resp) => {
+    const user = {
+        name:'Alok',
+        email:'aloksingh@gmail.com',
+        city:'Delhi',
+        skills:['php','javascript','JS','node']
+    }
+    resp.render('profile',{user});
 })
+app.get('/login',(_,resp) => {
+    resp.render('login');
+})
+app.get('/*', (_, resp)=>{
+    resp.sendFile(`${publicPath}/404.html`);
+});
+app.listen(4500)
