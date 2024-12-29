@@ -229,3 +229,78 @@ route.get("/contact", regFilter,(req, resp) => {
 });
 app.use('/',route);
 app.listen(4500);
+
+///
+// const {MongoClient} = require('mongodb');
+// const url = "mongodb://localhost:27017";
+// const database = "node_tut_2024";
+// const client = new MongoClient(url);
+
+// async function getData()
+// {
+//     let result = await client.connect();
+//     let db = result.db(database);
+//     let collection = db.collection("products");
+//     let resp = await collection.find({}).toArray();
+//     console.log(resp);
+// }
+// getData();
+
+const { MongoClient } = require('mongodb');
+//const url = "mongodb://localhost:27017";
+const url = "mongodb://127.0.0.1:27017";
+const database = "node_tut_2024";
+const client = new MongoClient(url);
+
+async function getData() {
+    try {
+        console.log("Connecting to the database...");
+        let result = await client.connect();
+        console.log("Database connected successfully!");
+
+        let db = result.db(database);
+        let collection = db.collection("products");
+
+        console.log("Fetching data from the 'products' collection...");
+        let resp = await collection.find({}).toArray();
+
+        console.log("Data retrieved successfully:");
+        console.log(resp);
+    } catch (error) {
+        console.error("Error connecting to the database or fetching data:", error);
+    } finally {
+        await client.close();
+        console.log("Database connection closed.");
+    }
+}
+
+getData();
+//29-12-2024
+
+const { MongoClient } = require("mongodb");
+//const url = "mongodb://localhost:27017";
+// const url = "mongodb://127.0.0.1:27017";
+// const database = "node_tut_2024";
+// const client = new MongoClient(url);
+
+async function dbConnect() {
+  let result = await client.connect();
+  let db = result.db(database);
+  return db.collection("products");
+  // let data = await collection.find({brand:"Apple"}).toArray();
+  // console.log(data);
+}
+//console.warn(dbConnect());
+
+// dbConnect().then((resp) => {
+//   resp.find().toArray().then((data) => {
+//       console.log(data);
+//     });
+// });
+const main = async () =>{
+  let data = await dbConnect();
+  data = await data.find().toArray();
+  console.log(data);
+
+}
+main();
