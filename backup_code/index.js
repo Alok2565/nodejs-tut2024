@@ -207,3 +207,25 @@ app.get('/*', (_, resp)=>{
     resp.sendFile(`${publicPath}/404.html`);
 });
 app.listen(4500)
+
+//28-12-20024
+const express = require("express");
+const regFilter = require('./middleware');
+const route = express.Router();
+//app.use(regFilter);
+route.use(regFilter);
+app.get("/", (req, resp) => {
+  resp.send("Welcom to home page");
+});
+
+app.get("/user", regFilter,(req, resp) => {
+  resp.send("Welcom to user page");
+});
+route.get("/about", regFilter,(req, resp) => {
+  resp.send("Welcom to About page");
+});
+route.get("/contact", regFilter,(req, resp) => {
+  resp.send("Welcom to Contact page");
+});
+app.use('/',route);
+app.listen(4500);
