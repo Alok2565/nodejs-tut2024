@@ -1,4 +1,4 @@
-const dbConnect = require('./config/mongodb_config');
+const dbConnect = require('../config/mongodb_config');
 
 const insert = async () =>{
     const db = await dbConnect();
