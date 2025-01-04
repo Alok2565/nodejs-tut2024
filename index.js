@@ -1,46 +1,34 @@
-const mongoose= require("mongoose");
+const express = require('express');
+require("./config/mongoose_config");
 
+const Product = require("./products");
 
+const app = express();
+app.use(express.json());
 
-  mongoose.connect("mongodb://127.0.0.1:27017/node_tut_2024");
-  const ProductSchema = new mongoose.Schema({
-      name: String,
-      brand: String,
-      price: Number,
-      category:String
-    });
-// const ProductsModel = mongoose.model("products", ProductSchema);
-// const savInDB = async () =>{
-//      const ProductsModel = mongoose.model("products", ProductSchema);
-//     let data = new ProductsModel({name:"nord 20",brand:"Realme",price:999,category:"mobile"});
-//     let result = await data.save();
-//     console.log(result);
-// }
-// savInDB();
+app.post("/create", async(req, resp) =>{
+  const product = new Product(req.body);
+  let result = await product.save();
+  //console.log(result);
+  resp.send({result:result});
+});
 
-// const updateInDB = async () => {
-//   const ProductsModel = mongoose.model("products", ProductSchema);
-//   const result = await ProductsModel.updateOne(
-//     { name: "nord 20" },
-//     { $set: { price: 890 } }
-//   );
-//   console.log("Update result:", result);
-// };
-// updateInDB();
+app.get("/list", async(req, resp) =>{
+  let result = await Product.find();
+  resp.send(result);
+});
 
-// const deleteInDB = async () =>{
-//       const ProductsModel = mongoose.model("products", ProductSchema);
-//       const result = await ProductsModel.deleteOne({name:"moto m20"});
-//       console.log(result);
-
-// }
-//deleteInDB();
-const findInDB = async () =>{
-  const ProductsModel = mongoose.model("products", ProductSchema);
-  const result = await ProductsModel.find({name:"nord 20"});
-  console.log(result);
-
-}
-findInDB();
-
-
+app.delete("/delete/:_id", async(req, resp) =>{
+  let result = await Product.deleteOne(req.params);
+  resp.send(result);
+})
+app.put("/update/:_id", async(req, resp) =>{
+  let result = await Product.updateOne(
+    req.params,
+    {
+      $set:req.body
+    }
+  );
+  resp.send(result);
+})
+app.listen(8000);
