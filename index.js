@@ -3,32 +3,39 @@ require("./config/mongoose_config");
 
 const Product = require("./products");
 
+const multer = require('multer');
+const fs = require('fs');
+
 const app = express();
 app.use(express.json());
 
-app.post("/create", async(req, resp) =>{
-  const product = new Product(req.body);
-  let result = await product.save();
-  //console.log(result);
-  resp.send({result:result});
-});
-
-app.get("/list", async(req, resp) =>{
-  let result = await Product.find();
-  resp.send(result);
-});
-
-app.delete("/delete/:_id", async(req, resp) =>{
-  let result = await Product.deleteOne(req.params);
-  resp.send(result);
-})
-app.put("/update/:_id", async(req, resp) =>{
-  let result = await Product.updateOne(
-    req.params,
+app.get("/search/:key", async(req,resp) =>{
+  const key = req.params.key;
+  console.log(key)
+  let product = await Product.find(
     {
-      $set:req.body
+      $or: [{"name":{$regex:key}},{"brand":{$regex:key}},{"category":{$regex:key}}]
     }
-  );
-  resp.send(result);
-})
+  )
+  resp.send(product);
+});
+
+const uploadFolder = 'uploads/';
+if (!fs.existsSync(uploadFolder)) {
+  fs.mkdirSync(uploadFolder, { recursive: true });
+}
+const upload = multer({
+  storage:multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname + "_" + Date.now() +".jpg",".jpeg");
+    }
+  })
+}).single("user_file");
+app.post("/upload", upload, (req,resp) =>{
+  resp.send("file uploaded");
+});
+app.listen(8000);
 app.listen(8000);

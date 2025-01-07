@@ -386,7 +386,27 @@ app.put("/update/:_id", async(req, resp) =>{
     }
   );
   resp.send(result);
-})
+});
+
+//search 
+const express = require('express');
+require("./config/mongoose_config");
+
+const Product = require("./products");
+
+
+app.use(express.json());
+
+app.get("/search/:key", async(req,resp) =>{
+  const key = req.params.key;
+  console.log(key)
+  let product = await Product.find(
+    {
+      $or: [{"name":{$regex:key}},{"brand":{$regex:key}},{"category":{$regex:key}}]
+    }
+  )
+  resp.send(product);
+});
 app.listen(8000);
 
 
