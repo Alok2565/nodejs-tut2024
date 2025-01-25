@@ -409,4 +409,61 @@ app.get("/search/:key", async(req,resp) =>{
 });
 app.listen(8000);
 
+//Uploads
+
+const uploadFolder = 'uploads/';
+if (!fs.existsSync(uploadFolder)) {
+  fs.mkdirSync(uploadFolder, { recursive: true });
+}
+const upload = multer({
+  storage:multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname + "_" + Date.now() +".jpg",".jpeg");
+    }
+  })
+}).single("user_file");
+app.post("/upload", upload, (req,resp) =>{
+  resp.send("file uploaded");
+});
+app.listen(8000);
+
+//OS module
+const os =require('os');
+//console.log(os.arch());
+//console.log(os.freemem()/(1024*1024*1024));
+//console.log(os.totalmem()/(1024*1024*1024));
+// console.log(os.hostname());
+// console.log(os.platform());
+console.log(os.userInfo());
+
+//API HIT Count 
+const express = require('express');
+const EventEmitter = require('events'); //EventEmitter is a calss
+
+
+const event = new EventEmitter();
+let count = 0;
+event.on('CountAPI', () => {
+    //count++;
+      console.log("Event Called",count++);
+    });
+app.get("/", (req,resp) =>{
+    resp.send("API called");
+    event.emit("CountAPI");
+});
+app.get("/search", (req,resp) =>{
+    resp.send("Search API called");
+    event.emit("CountAPI");
+});
+app.get("/update", (req,resp) =>{
+    resp.send("Update API called");
+    event.emit("CountAPI")
+});
+
+app.listen(8000);
+
+
 
